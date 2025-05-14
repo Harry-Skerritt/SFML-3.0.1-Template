@@ -40,10 +40,10 @@ set(SOURCE_FILES
         src/Game.h
 )
 
-add_executable(SFMLProject ${SOURCE_FILES})
+add_executable(${CMAKE_PROJECT_NAME} ${SOURCE_FILES})
 
 # Link SFML 3 libraries
-target_link_libraries(SFMLProject PRIVATE
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
         SFML::Graphics
         SFML::Window
         SFML::System
@@ -58,7 +58,7 @@ if(APPLE)
     find_library(COREVIDEO_LIBRARY CoreVideo REQUIRED)
     find_library(COREFOUNDATION_LIBRARY CoreFoundation REQUIRED)
 
-    target_link_libraries(SFMLProject PRIVATE
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
             ${COCOA_LIBRARY}
             ${IOKIT_LIBRARY}
             ${COREVIDEO_LIBRARY}
@@ -69,35 +69,28 @@ if(APPLE)
 
     set(APP_ICON "${CMAKE_SOURCE_DIR}/mac/icon.icns")
     set_source_files_properties(${APP_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
-    target_sources(SFMLProject PRIVATE ${APP_ICON})
+    target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${APP_ICON})
 
-    set_target_properties(SFMLProject PROPERTIES
+    set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
             MACOSX_BUNDLE TRUE
-            MACOSX_BUNDLE_BUNDLE_NAME "SFMLProject"
+            MACOSX_BUNDLE_BUNDLE_NAME "${CMAKE_PROJECT_NAME}"
             MACOSX_BUNDLE_INFO_PLIST "${CMAKE_SOURCE_DIR}/mac/Info.plist"
     )
 
     # Copy Data folder into .app bundle
-    add_custom_command(TARGET SFMLProject POST_BUILD
+    add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_directory
             "${CMAKE_SOURCE_DIR}/Data"
-            "$<TARGET_BUNDLE_CONTENT_DIR:SFMLProject>/Resources/Data"
+            "$<TARGET_BUNDLE_CONTENT_DIR:${CMAKE_PROJECT_NAME}>/Resources/Data"
             COMMENT "Copying Data/ into app bundle Resources..."
     )
 else()
     # Copy Data next to executable on Windows/Linux
-    add_custom_command(TARGET SFMLProject POST_BUILD
+    add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_directory
             "${CMAKE_SOURCE_DIR}/Data"
-            "$<TARGET_FILE_DIR:SFMLProject>/Data"
+            "$<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>/Data"
             COMMENT "Copying Data/ next to executable..."
     )
 endif()
 
-if(WIN32)
-    add_custom_command(
-            TARGET SFMLProject
-            COMMENT "Copy OpenAL DLL to build directory so app can have sound"
-            PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SFML_SOURCE_DIR}/extlibs/bin/$<IF:$<EQUAL:${CMAKE_SIZEOF_VOID_P},8>,x64,x86>/openal32.dll $<TARGET_FILE_DIR:FallingSandSim>
-            VERBATIM)
-endif()
