@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+ "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key>
+    <string>SFMLProject</string>
+
+    <key>CFBundleDisplayName</key>
+    <string>SFMLProject</string>
+
+    <key>CFBundleExecutable</key>
+    <string>SFMLProject</string>
+
+    <key>CFBundleIdentifier</key>
+    <string>com.yourdomain.sfmlproject</string>
+
+    <key>CFBundleVersion</key>
+    <string>1.0</string>
+
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+
+    <key>CFBundleIconFile</key>
+    <string>icon</string> <!-- Don't include the .icns extension -->
+
+    <key>LSMinimumSystemVersion</key>
+    <string>10.15</string>
+
+    <key>NSHighResolutionCapable</key>
+    <true/>
+</dict>
+</plist>
