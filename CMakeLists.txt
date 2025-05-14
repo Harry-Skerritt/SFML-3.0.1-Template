@@ -94,3 +94,7 @@ else()
     )
 endif()
 
+if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Release")
+    set_target_properties(SFMLProject PROPERTIES WIN32_EXECUTABLE TRUE)
+endif()
+
