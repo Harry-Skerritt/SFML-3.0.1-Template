@@ -10,8 +10,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # windows specific configurations
 if(WIN32)
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/bin/Debug)
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/bin/Release)
+    set(CMAKE_CXX_FLAGS "-static-libgcc -static-libstdc++")
+    set(CMAKE_EXE_LINKER_FLAGS "-static")
+    option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 endif()
 
 # macOS specific configurations
@@ -91,4 +92,12 @@ else()
             "$<TARGET_FILE_DIR:SFMLProject>/Data"
             COMMENT "Copying Data/ next to executable..."
     )
+endif()
+
+if(WIN32)
+    add_custom_command(
+            TARGET SFMLProject
+            COMMENT "Copy OpenAL DLL to build directory so app can have sound"
+            PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SFML_SOURCE_DIR}/extlibs/bin/$<IF:$<EQUAL:${CMAKE_SIZEOF_VOID_P},8>,x64,x86>/openal32.dll $<TARGET_FILE_DIR:FallingSandSim>
+            VERBATIM)
 endif()
